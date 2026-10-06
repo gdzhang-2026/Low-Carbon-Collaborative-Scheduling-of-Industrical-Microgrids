@@ -61,6 +61,7 @@ for d=1:nd
         soc(1,d)==p.initialSOC,soc(end,d)==p.initialSOC, ...
         p.essCapacity*diff(soc(:,d))==dt*(p.essEfficiency*ch(:,d)-dis(:,d)/p.essEfficiency), ...
         -p.ealRamp<=diff([p.ratedPower;pe(:,d);p.ratedPower])<=p.ealRamp, ...
+        -p.ealRamp<=pe(1,d)-pe(end,d)<=p.ealRamp, ...
         -p.gtRamp*dt<=diff([gt(end,d);gt(:,d)])<=p.gtRamp*dt];
 end
 production=p.cells*p.faraday*p.ratedCurrent*p.currentEfficiency*dt*u;
@@ -203,6 +204,8 @@ r.checks.exactPowerError=max(abs(r.power-(p.resistance*(p.ratedCurrent*r.current
     p.backEMF*p.ratedCurrent*r.current/1000)),[],'all');
 r.checks.bankResidual=max(abs(diff(r.bank)-r.buy+r.sell));
 r.checks.minConstraintResidual=min(check(f));
+r.checks.ealBoundaryRamp=max(abs(r.power(1,:)-r.power(end,:)));
+assert(r.checks.ealBoundaryRamp<=p.ealRamp+1e-5);
 assert(r.checks.heatResidual<1e-4 && r.checks.socResidual<1e-4);
 assert(r.checks.bankResidual<1e-4 && r.metrics.FinalBalance>=-1e-3);
 % Check the sale and purchase bounds against numeric pre-offset emissions.

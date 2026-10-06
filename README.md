@@ -104,6 +104,9 @@ the same across cases. Physical emissions are reported before offsets.
   Annual CEA and certificate transactions are counted once.
 - Each daily schedule has 96 controls and 97 SOC/temperature boundary states.
   SOC and temperature return to their initial values at the daily endpoint.
+  EAL ramp limits apply within the day and directly from the last interval to
+  the first interval of the repeated schedule. The first and last EAL powers
+  also remain within one ramp increment of rated power.
 - EAL current is 0.90--1.05 p.u. with constant efficiency 0.94. Annual production
   stays within 95--105% of rated annual production. A net heat balance models
   thermal accumulation; its effective heat-loss coefficient follows nominal
